@@ -219,7 +219,20 @@
           const units = (volumeMl * unitsPerMl).toFixed(0);
           doseInst += ` (${units} units)`;
         }
-        doseInst += ` into your syringe from the reconstituted vial. Administer as directed by your healthcare provider.`;
+        doseInst += ` into your syringe from the reconstituted vial.`;
+        if (volumeMl > syringeSize) {
+          const numInjections = Math.ceil(volumeMl / syringeSize);
+          const splitVolume = (volumeMl / numInjections).toFixed(2);
+          const splitUnits = isInsulin
+            ? (splitVolume * unitsPerMl).toFixed(0)
+            : null;
+          doseInst += ` <strong>Warning: This volume exceeds your syringe's capacity (${syringeSize}ml${
+            isInsulin ? ` or ${syringeSize * unitsPerMl} units` : ""
+          }). Use a larger syringe or split the dose into ${numInjections} injections of ${splitVolume}ml${
+            splitUnits ? ` (${splitUnits} units)` : ""
+          } each (Spread across the week or administered consecutively on the same day). Alternatively, if the vial is not yet reconstituted, add less BAC water to achieve a higher concentration and reduce the dose volume.</strong>`;
+        }
+        doseInst += ` Administer as directed by your healthcare provider.`;
 
         const storeInst = `Store the reconstituted ${peptide} vial in the refrigerator at all times. Only remove it to draw and administer your weekly dose, then return it to the refrigerator immediately.`;
 
